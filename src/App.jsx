@@ -1,10 +1,11 @@
 import Header from "./components/Header"
 import { TaskList } from "./components/TaskList";
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
+import { useCreateTask } from "./hooks/useTaskList";
 
 
 function App() {
-  const [items, setItems] = useState([]);
+  const [items, addItems, deleteItem, deleteAll] = useCreateTask([]);
   const [value, setValue] = useState('');
   
   function handleChange(event) {
@@ -13,17 +14,17 @@ function App() {
 
   function handleSubmit(event){
     event.preventDefault();
-    setItems([...items, { name: value}]);
-    setValue('')
+    addItems(value)
+    setValue("")
   }
 
   function handleDeleteAll(){
-    setItems([]);
+    localStorage.clear()
+    deleteAll()
   }
 
   function handleDeleteItem(itemToDelete){
-    const newList = items.filter(item => item.name !== itemToDelete);
-    setItems(newList)
+    deleteItem(itemToDelete)
   }
 
   return(
